@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Practice</title>
+</head>
+<body>
+    <h1>Send to Server</h1>
+    <input id="send" placeholder="Enter something" />
+    <button id="sendButton">Send</button>
+    <h1 id="server"></h1>
+
+    <!-- Load Socket.IO -->
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io("http://localhost:3000"); // Establish connection
+
+        // Confirm connection
+        socket.on("connect", () => {
+            console.log("Connection established");
+        });
+
+        // Receive message from server
+        socket.on("SM", (message) => {
+            console.log("Received from server:", message);
+            document.getElementById("server").innerText = message; // Display message on page
+        });
+
+        // Send message to server
+        document.getElementById("sendButton").addEventListener("click", () => {
+            const message = document.getElementById("send").value;
+            if (message) {
+                socket.emit("MS", message); // Send message to server
+            }
+        });
+    </script>
+</body>
+</html>
